@@ -35,4 +35,5 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func discordReady(s *discordgo.Session, _ *discordgo.Ready) {
 	log.Printf("[info] ready! logged in as %s\n", s.State.User.String())
+	saveModel()
 }

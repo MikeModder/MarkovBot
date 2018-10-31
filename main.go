@@ -11,6 +11,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/mb-14/gomarkov"
+	"github.com/robfig/cron"
 )
 
 var (
@@ -60,6 +61,9 @@ func main() {
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(discordReady)
 
+	// Add cron job to save model every 30m
+	setupCron()
+
 	err = dg.Open()
 	if err != nil {
 		log.Fatalf("[error] failed to open Discord session: %v\n", err)
@@ -72,6 +76,13 @@ func main() {
 	dg.Close()
 	saveModel()
 
+}
+
+func setupCron() {
+	c := cron.New()
+	c.AddFunc("@every 30m", func() {
+		saveModel()
+	})
 }
 
 func saveModel() {
